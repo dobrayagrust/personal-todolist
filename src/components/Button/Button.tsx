@@ -6,8 +6,8 @@ type ButtonType = {
     buttonTitle: string
     callback: () => void
     todolistID?: string
-    value?: FilterValuesType
     filter?: FilterValuesType
+    onChange?: () => void
 }
 
 export const Button = (props: ButtonType) => {
@@ -15,10 +15,11 @@ export const Button = (props: ButtonType) => {
     const callbackHandler = () => {
         props.callback()
     }
-    const classActive = props.filter === props.value ? classes.activeFilter : ''
+    const classActive = props.filter === props.buttonTitle.toLowerCase() ? classes.activeFilter : ''
 
     return (
-        <button className={classActive}
+
+    <button className={classActive}
                 onClick={callbackHandler}>
             {props.buttonTitle}
         </button>

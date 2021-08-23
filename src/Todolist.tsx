@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {FilterValuesType, TaskType} from './App';
 import {Button} from "./components/Button/Button";
 import {Input} from "./components/Input/Input";
@@ -22,7 +22,7 @@ type TodoListType = {
 
 export const Todolist = React.memo((props: TodoListType) => {
 
-    const callbackHandlerAll = () => {
+/*    const callbackHandlerAll = () => {
         props.changeFilter("all", props.todolistsID)
     }
     const callbackHandlerActive = () => {
@@ -30,23 +30,51 @@ export const Todolist = React.memo((props: TodoListType) => {
     }
     const callbackHandlerCompleted = () => {
         props.changeFilter("completed", props.todolistsID)
+    }*/
+
+    const universalHandler = (filterValue: FilterValuesType) => {
+        props.changeFilter(filterValue, props.todolistsID)
     }
+
+    let [newTaskTitle, setNewTaskTitle] = useState("")
 
     return (
         <div>
             <h3>{props.title}</h3>
-            <Input callbackClick={(title: string) => props.addNewTask(title, props.todolistsID)}/>
+            <Input newTaskTitle={newTaskTitle}
+                   setNewTaskTitle={setNewTaskTitle}
+                   addNewTask={props.addNewTask}
+                   todolistID={props.todolistsID}
+            />
+            {/*<Input callbackClick={(newTaskTitle: string) => props.addNewTask(newTaskTitle, props.todolistsID)}/>*/}
+            <Button buttonTitle={"+"} callback={() => {props.addNewTask(newTaskTitle, props.todolistsID)}}/>
             <ul>
                 {props.tasks.map((task) => {
+
+                    const removeTaskHandler = () => {
+                        props.removeTask(task.id, props.todolistsID)
+                    }
+
+                    const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+                        props.changeTaskStatus(task.id, event.currentTarget.checked, props.todolistsID)
+                    }
+
+                    const onKeyPressHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+                       if (event.key === "Enter") {
+                           props.addNewTask(props.title, props.todolistsID)
+                       }
+                    }
                     return (
                         <li key={task.id}>
-                            <Button buttonTitle={'x'}
-                                    callback={() => {
-                                        props.removeTask(task.id, props.todolistsID)
-                                    }}
+                            <Button buttonTitle={'X'}
+                                    callback={removeTaskHandler}
+                                    // onChange={() => {alert("Click")}}
                             />
+                            {/*<Input callbackClick={() => {}}/>*/}
                             <input type="checkbox"
+                                   onChange={onChangeHandler}
                                    checked={task.isDone}
+                                   onKeyPress={onKeyPressHandler}
                             />
                             <span>{task.title}</span>
                         </li>)
@@ -54,21 +82,15 @@ export const Todolist = React.memo((props: TodoListType) => {
             </ul>
             <div>
                 <Button buttonTitle={'All'}
-                        callback={callbackHandlerAll}
-                        todolistID={props.todolistsID}
-                        value={'all'}
+                        callback={() => universalHandler('all')}
                         filter={props.filter}
                 />
                 <Button buttonTitle={'Active'}
-                        callback={callbackHandlerActive}
-                        todolistID={props.todolistsID}
-                        value={'active'}
+                        callback={() => universalHandler('active')}
                         filter={props.filter}
                 />
                 <Button buttonTitle={'Completed'}
-                        callback={callbackHandlerCompleted}
-                        todolistID={props.todolistsID}
-                        value={'completed'}
+                        callback={() => universalHandler('completed')}
                         filter={props.filter}
                 />
             </div>

@@ -49,11 +49,13 @@ function App() {
     });
 
     const addNewTask = (title: string, todolistsID: string) => {
+        setTasks({...tasks, [todolistsID]: [{id: v1(), title: title, isDone: false}, ...tasks[todolistsID]]})
         // let newTask = {id: v1(), title: title, isDone: false};
         // setTasks([newTask, ...tasks])
     }
 
     function removeTask(taskID: string, todolistsID: string) {
+        setTasks({...tasks, [todolistsID]: tasks[todolistsID].filter(task => task.id !== taskID)})
         // let filteredTasks = tasks.filter(task => task.id !== id);
         // setTasks(filteredTasks);
     }
