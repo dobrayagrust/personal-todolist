@@ -5,7 +5,8 @@ type SpanType = {
     callback: (title: string) => void
 }
 
-export const EditableSpan = (props: SpanType) => {
+export const EditableSpan = React.memo((props: SpanType) => {
+    console.log("EditableSpan")
 
     let [title, setTitle] = useState(props.title)
     let [edit, setEdit] = useState(false)
@@ -22,7 +23,6 @@ export const EditableSpan = (props: SpanType) => {
         props.callback(title)
     }
 
-
     return (
         edit
             ? <input value={title}
@@ -32,4 +32,4 @@ export const EditableSpan = (props: SpanType) => {
             />
             : <span onDoubleClick={activateEdit}>{props.title}</span>
     )
-}
+})

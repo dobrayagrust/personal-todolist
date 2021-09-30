@@ -22,17 +22,18 @@ type TodoListType = {
 }
 
 export const Todolist = React.memo((props: TodoListType) => {
-    /*    const callbackHandlerAll = () => {
-            props.changeFilter("all", props.todolistID)
-        }
-        const callbackHandlerActive = () => {
-            props.changeFilter("active", props.todolistID)
-        }
-        const callbackHandlerCompleted = () => {
-            props.changeFilter("completed", props.todolistID)
-        }*/
+    console.log("Todolist")
+
     const universalHandler = (filterValue: FilterValuesType) => {
         props.changeFilter(filterValue, props.todolistID)
+    }
+
+    let priorityTasks = props.tasks
+    if (props.filter === "active") {
+        priorityTasks = props.tasks.filter(task => !task.isDone)
+    }
+    if (props.filter === "completed") {
+        priorityTasks = props.tasks.filter(task => task.isDone)
     }
 
     return (

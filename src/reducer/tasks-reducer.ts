@@ -52,23 +52,39 @@ export const tasksReducer = (state = initialState, action: ActionsType): TasksTy
             // return stateCopy;
         case ADD_TASK:
             return {...state, [action.todolistID]: [{id: v1(), title: action.title, isDone: false}, ...state[action.todolistID]]}
-        case CHANGE_TASK_STATUS:
+        case CHANGE_TASK_STATUS: {
+            let todolistTasks = state[action.todolistID]
+            let newArrayTaks = todolistTasks
+                .map(t => t.id === action.taskID
+                    ? {...t, isDone: action.isDone}
+                    : t)
+            state[action.todolistID] = newArrayTaks
+            return ({...state})
+        }
             // let copyState = {...state}
-            task = copyState[action.todolistID].find(td => td.id === action.taskID)
-            if (task) {
-                task.isDone = action.isDone
-                return copyState
-            }
-            return state
+            // task = copyState[action.todolistID].find(td => td.id === action.taskID)
+            // if (task) {
+            //     task.isDone = action.isDone
+            //     return copyState
+            // }
+            // return state
 
-        case CHANGE_TASK_TITLE:
+        case CHANGE_TASK_TITLE: {
+            let todolistTasks = state[action.todolistID]
+            let newArrayTasks = todolistTasks
+                .map(t => t.id === action.taskID
+                ? {...t, title: action.title}
+                : t)
+            state[action.todolistID] = newArrayTasks
+            return ({...state})
+        }
             // let copyState = {...state}
-            task = copyState[action.todolistID].find(td => td.id === action.taskID)
-            if (task) {
-                task.title = action.title
-                return copyState
-            }
-            return state
+            // task = copyState[action.todolistID].find(td => td.id === action.taskID)
+            // if (task) {
+            //     task.title = action.title
+            //     return copyState
+            // }
+            // return state
 
         case ADD_TODOLIST:
             return {...state, [action.todolistID]: []}

@@ -1,11 +1,12 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useCallback, useState} from 'react';
 import classes from "./InputForm.module.css";
 
 export type ItemFormType = {
     addItem: (title: string) => void
 }
 
-export const ItemForm = (props: ItemFormType) => {
+export const ItemForm = React.memo((props: ItemFormType) => {
+    console.log("InputForm")
 
     let [title, setTitle] = useState("")
     let [error, setError] = useState<string | null>(null)
@@ -24,13 +25,10 @@ export const ItemForm = (props: ItemFormType) => {
         }
     }
 
-    /*    const onClickHandler = () => {
-            props.callbackClick(props.newTaskTitle)
-            props.setNewTaskTitle("")
-        }*/
-
     const onKeyPressHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
+        if (error !== null) {
+            setError(null)
+        }
         if (event.key === "Enter") {
             addTask()
         }
@@ -48,5 +46,5 @@ export const ItemForm = (props: ItemFormType) => {
             {error && <div className={classes.errorMessage}>{error}</div>}
         </div>
     )
-}
+})
 
